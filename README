@@ -2,3 +2,25 @@ go-midi-player
 ==============
 
 A MIDI player written in Go.
+
+Work in progress: it parses Standard MIDI Files and prints a summary,
+but does not play audio yet.
+
+* reads the header (format, track count, time division)
+* parses the events of every track, including running status
+* counts the notes in each track
+
+Usage
+-----
+
+Run it from the src directory:
+
+	cd src
+	go run . <file.mid>
+
+Example output:
+
+	format 1, 8 tracks, division 120
+	track 0: 66 events, 0 notes
+	track 1: 1966 events, 722 notes
+	track 2: 851 events, 423 notes
