@@ -36,3 +36,26 @@ func readHeader(r io.Reader) (Header, error) {
       }
       return h, nil
 }
+
+func readTrack(r io.Reader) ([]byte, error) {
+      for {
+              var chunk struct {
+                      ID     [4]byte
+                      Length uint32
+              }
+              if err := binary.Read(r, binary.BigEndian, &chunk); err != nil {
+                      return nil, err
+              }
+              if string(chunk.ID[:]) != "MTrk" {
+                      if _, err := io.CopyN(io.Discard, r, int64(chunk.Length)); err != nil {
+                              return nil, err
+                      }
+                      continue
+              }
+              data := make([]byte, chunk.Length)
+              if _, err := io.ReadFull(r, data); err != nil {
+                      return nil, err
+              }
+              return data, nil
+      }
+}
